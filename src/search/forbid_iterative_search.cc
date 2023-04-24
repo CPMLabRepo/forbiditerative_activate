@@ -643,14 +643,21 @@ shared_ptr<AbstractTask> ForbidIterativeSearch::create_reformulated_task_superse
 
 
 void ForbidIterativeSearch::plan_to_multiset(const std::vector<int>& plan, std::unordered_map<int, int>& plan_multiset) const {
+    OperatorsProxy operators = task_proxy.get_operators();
+    std::string act_name, flag_str = "activate";
+    int start, end; 
     for (int op_no : plan) {
         auto it = plan_multiset.find(op_no);
+        act_name= operators[op_no].get_name();
+        start, end = act_name.find(flag_str);
+        if (end != std::string::npos){
         if (it == plan_multiset.end()) {
             plan_multiset[op_no] = 1;
         } else {
             plan_multiset[op_no]++;
         }
     }
+   }
 }
 
 bool ForbidIterativeSearch::multiset_union(std::unordered_map<int, int>& multiset, const std::unordered_map<int, int>& from_multiset) const {
